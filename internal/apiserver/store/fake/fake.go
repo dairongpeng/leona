@@ -1,0 +1,135 @@
+// Copyright 2021 dairongpeng <dairongpeng@foxmail.com>. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package fake
+
+import (
+	"fmt"
+	"sync"
+
+	v1 "github.com/dairongpeng/leona/api/apiserver/v1"
+	metav1 "github.com/dairongpeng/leona/pkg/meta/v1"
+	"github.com/dairongpeng/leona/pkg/util/idutil"
+	"github.com/ory/ladon"
+
+	"github.com/dairongpeng/leona/internal/apiserver/store"
+)
+
+// ResourceCount defines the number of fake resources.
+const ResourceCount = 1000
+
+type datastore struct {
+	sync.RWMutex
+	users    []*v1.User
+	secrets  []*v1.Secret
+	policies []*v1.Policy
+}
+
+func (ds *datastore) Users() store.UserStore {
+	return newUsers(ds)
+}
+
+func (ds *datastore) Secrets() store.SecretStore {
+	return newSecrets(ds)
+}
+
+func (ds *datastore) Policies() store.PolicyStore {
+	return newPolicies(ds)
+}
+
+func (ds *datastore) PolicyAudits() store.PolicyAuditStore {
+	return newPolicyAudits(ds)
+}
+
+func (ds *datastore) Close() error {
+	return nil
+}
+
+var (
+	fakeFactory store.Factory
+	once        sync.Once
+)
+
+// GetFakeFactoryOr create fake store.
+func GetFakeFactoryOr() (store.Factory, error) {
+	once.Do(func() {
+		fakeFactory = &datastore{
+			users:    FakeUsers(ResourceCount),
+			secrets:  FakeSecrets(ResourceCount),
+			policies: FakePolicies(ResourceCount),
+		}
+	})
+
+	if fakeFactory == nil {
+		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v", fakeFactory)
+	}
+
+	return fakeFactory, nil
+}
+
+// FakeUsers returns fake user data.
+func FakeUsers(count int) []*v1.User {
+	// init some user records
+	users := make([]*v1.User, 0)
+	for i := 1; i <= count; i++ {
+		users = append(users, &v1.User{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: fmt.Sprintf("user%d", i),
+				ID:   uint64(i),
+			},
+			Nickname: fmt.Sprintf("user%d", i),
+			Password: fmt.Sprintf("User%d@2020", i),
+			Email:    fmt.Sprintf("user%d@qq.com", i),
+		})
+	}
+
+	return users
+}
+
+// FakeSecrets returns fake secret data.
+func FakeSecrets(count int) []*v1.Secret {
+	secrets := make([]*v1.Secret, 0)
+	for i := 1; i <= count; i++ {
+		secrets = append(secrets, &v1.Secret{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: fmt.Sprintf("secret%d", i),
+				ID:   uint64(i),
+			},
+			Username:  fmt.Sprintf("user%d", i),
+			SecretID:  idutil.NewSecretID(),
+			SecretKey: idutil.NewSecretKey(),
+		})
+	}
+
+	return secrets
+}
+
+// FakePolicies returns fake policy data.
+func FakePolicies(count int) []*v1.Policy {
+	policies := make([]*v1.Policy, 0)
+	for i := 1; i <= count; i++ {
+		policies = append(policies, &v1.Policy{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: fmt.Sprintf("policy%d", i),
+				ID:   uint64(i),
+			},
+			Username: fmt.Sprintf("user%d", i),
+			Policy: v1.AuthzPolicy{
+				DefaultPolicy: ladon.DefaultPolicy{},
+			},
+		})
+	}
+
+	return policies
+}

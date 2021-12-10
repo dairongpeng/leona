@@ -1,0 +1,72 @@
+// Copyright 2021 dairongpeng <dairongpeng@foxmail.com>. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/dairongpeng/leona/api/proto/apiserver/v1";
+
+//go:generate protoc -I. --go_out=plugins=grpc:.
+
+
+// Cache implements a cache rpc service.
+service Cache{
+	rpc ListSecrets(ListSecretsRequest) returns (ListSecretsResponse) {}
+	rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse) {}
+}
+
+// ListSecretsRequest defines ListSecrets request struct.
+message ListSecretsRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// SecretInfo contains secret details.
+message SecretInfo {
+    string name = 1;
+    string secret_id  = 2;
+    string username   = 3;
+    string secret_key = 4;
+    int64 expires = 5;
+    string description = 6;
+    string created_at = 7;
+    string updated_at = 8;
+}
+
+// ListSecretsResponse defines ListSecrets response struct.
+message ListSecretsResponse {
+    int64 total_count = 1;
+    repeated  SecretInfo items = 2;
+}
+
+// ListPoliciesRequest defines ListPolicies request struct.
+message ListPoliciesRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// PolicyInfo contains policy details.
+message PolicyInfo {
+    string name= 1;
+    string username   = 2;
+    string policy_str = 3;
+    string policy_shadow = 4;
+    string created_at = 5;
+}
+
+// ListPoliciesResponse defines ListPolicies response struct.
+message ListPoliciesResponse {
+    int64 total_count = 1;
+    repeated  PolicyInfo items = 2;
+}
