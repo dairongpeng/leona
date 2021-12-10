@@ -426,7 +426,8 @@ func TestPollForever(t *testing.T) {
 		})
 
 		if err := PollInfinite(time.Microsecond, f); err != nil {
-			t.Fatalf("unexpected error %v", err)
+			t.Errorf("unexpected error %v", err)
+			return
 		}
 
 		close(ch)
@@ -457,7 +458,7 @@ func TestPollForever(t *testing.T) {
 				return
 			}
 		}
-		t.Fatalf("expected closed channel after two iterations")
+		t.Errorf("expected closed channel after two iterations")
 	}()
 	<-complete
 }
@@ -577,7 +578,7 @@ func TestWaitForClosesStopCh(t *testing.T) {
 	waitFunc := poller(time.Millisecond, ForeverTestTimeout)
 	var doneCh <-chan struct{}
 
-	WaitFor(func(done <-chan struct{}) <-chan struct{} {
+	_ = WaitFor(func(done <-chan struct{}) <-chan struct{} {
 		doneCh = done
 		return waitFunc(done)
 	}, func() (bool, error) {
@@ -601,7 +602,7 @@ func TestPollUntil(t *testing.T) {
 	pollDone := make(chan struct{})
 
 	go func() {
-		PollUntil(time.Microsecond, ConditionFunc(func() (bool, error) {
+		_ = PollUntil(time.Microsecond, ConditionFunc(func() (bool, error) {
 			called <- true
 			return false, nil
 		}), stopCh)
@@ -768,7 +769,7 @@ func TestJitterBackoffManagerWithRealClock(t *testing.T) {
 	for i := 0; i < 5; i++ {
 		start := time.Now()
 		<-backoffMgr.Backoff().C()
-		passed := time.Now().Sub(start)
+		passed := time.Since(start)
 		if passed < 1*time.Millisecond {
 			t.Errorf("backoff should be at least 1ms, but got %s", passed.String())
 		}
@@ -790,7 +791,7 @@ func TestExponentialBackoffManagerWithRealClock(t *testing.T) {
 	for i := range durationFactors {
 		start := time.Now()
 		<-backoffMgr.Backoff().C()
-		passed := time.Now().Sub(start)
+		passed := time.Since(start)
 		if passed < durationFactors[i]*time.Millisecond {
 			t.Errorf("backoff should be at least %d ms, but got %s", durationFactors[i], passed.String())
 		}

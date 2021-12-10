@@ -39,9 +39,7 @@ func NewDict(objs ...JSONPair) *JSONDict {
 
 func NewArray(objs ...JSONObject) *JSONArray {
 	arr := JSONArray{data: make([]JSONObject, 0, len(objs))}
-	for _, o := range objs {
-		arr.data = append(arr.data, o)
-	}
+	arr.data = append(arr.data, objs...)
 	return &arr
 }
 
@@ -134,9 +132,7 @@ func (this *JSONArray) SetAt(idx int, obj JSONObject) {
 }
 
 func (this *JSONArray) Add(objs ...JSONObject) {
-	for _, o := range objs {
-		this.data = append(this.data, o)
-	}
+	this.data = append(this.data, objs...)
 }
 
 func (this *JSONValue) Contains(keys ...string) bool {

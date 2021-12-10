@@ -91,8 +91,7 @@ func (o *JSONBool) Equals(json JSONObject) bool {
 }
 
 func (o *JSONValue) Equals(json JSONObject) bool {
-	_, ok := json.(*JSONValue)
-	if !ok {
+	if _, ok := json.(*JSONValue); !ok {
 		return false
 	}
 	return true

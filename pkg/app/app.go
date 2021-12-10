@@ -284,11 +284,12 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 }
 
 func (a *App) applyOptionRules() error {
-	if completeableOptions, ok := a.options.(CompleteableOptions); ok {
-		if err := completeableOptions.Complete(); err != nil {
-			return err
-		}
-	}
+	// 暂时不需要jwt鉴权
+	//if completeableOptions, ok := a.options.(CompleteableOptions); ok {
+	//	if err := completeableOptions.Complete(); err != nil {
+	//		return err
+	//	}
+	//}
 
 	if errs := a.options.Validate(); len(errs) != 0 {
 		return errors.NewAggregate(errs)

@@ -15,7 +15,6 @@
 package apiserver
 
 import (
-	"context"
 	"fmt"
 
 	pb "github.com/dairongpeng/leona/api/proto/apiserver/v1"
@@ -32,12 +31,11 @@ import (
 	"github.com/dairongpeng/leona/pkg/log"
 	"github.com/dairongpeng/leona/pkg/shutdown"
 	"github.com/dairongpeng/leona/pkg/shutdown/shutdownmanagers/posixsignal"
-	"github.com/dairongpeng/leona/pkg/storage"
 )
 
 type apiServer struct {
-	gs               *shutdown.GracefulShutdown
-	redisOptions     *genericoptions.RedisOptions
+	gs *shutdown.GracefulShutdown
+	// redisOptions     *genericoptions.RedisOptions
 	gRPCAPIServer    *grpcAPIServer
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
@@ -85,8 +83,8 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 	}
 
 	server := &apiServer{
-		gs:               gs,
-		redisOptions:     cfg.RedisOptions,
+		gs: gs,
+		// redisOptions:     cfg.RedisOptions,
 		genericAPIServer: genericServer,
 		gRPCAPIServer:    extraServer,
 	}
@@ -97,7 +95,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 func (s *apiServer) PrepareRun() preparedAPIServer {
 	initRouter(s.genericAPIServer.Engine)
 
-	s.initRedisStore()
+	// s.initRedisStore()
 
 	// 监听到信号后，执行回调，做一些收尾清理工作，优雅关停
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
@@ -174,9 +172,9 @@ func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Con
 		return
 	}
 
-	if lastErr = cfg.SecureServing.ApplyTo(genericConfig); lastErr != nil {
-		return
-	}
+	//if lastErr = cfg.SecureServing.ApplyTo(genericConfig); lastErr != nil {
+	//	return
+	//}
 
 	if lastErr = cfg.InsecureServing.ApplyTo(genericConfig); lastErr != nil {
 		return
@@ -188,38 +186,38 @@ func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Con
 //nolint: unparam
 func buildExtraConfig(cfg *config.Config) (*ExtraConfig, error) {
 	return &ExtraConfig{
-		Addr:         fmt.Sprintf("%s:%d", cfg.GRPCOptions.BindAddress, cfg.GRPCOptions.BindPort),
-		MaxMsgSize:   cfg.GRPCOptions.MaxMsgSize,
-		ServerCert:   cfg.SecureServing.ServerCert,
+		Addr:       fmt.Sprintf("%s:%d", cfg.GRPCOptions.BindAddress, cfg.GRPCOptions.BindPort),
+		MaxMsgSize: cfg.GRPCOptions.MaxMsgSize,
+		// ServerCert:   cfg.SecureServing.ServerCert,
 		mysqlOptions: cfg.MySQLOptions,
 		// etcdOptions:      cfg.EtcdOptions,
 	}, nil
 }
 
-func (s *apiServer) initRedisStore() {
-	ctx, cancel := context.WithCancel(context.Background())
-	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
-		cancel()
-
-		return nil
-	}))
-
-	config := &storage.Config{
-		Host:                  s.redisOptions.Host,
-		Port:                  s.redisOptions.Port,
-		Addrs:                 s.redisOptions.Addrs,
-		MasterName:            s.redisOptions.MasterName,
-		Username:              s.redisOptions.Username,
-		Password:              s.redisOptions.Password,
-		Database:              s.redisOptions.Database,
-		MaxIdle:               s.redisOptions.MaxIdle,
-		MaxActive:             s.redisOptions.MaxActive,
-		Timeout:               s.redisOptions.Timeout,
-		EnableCluster:         s.redisOptions.EnableCluster,
-		UseSSL:                s.redisOptions.UseSSL,
-		SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
-	}
-
-	// try to connect to redis
-	go storage.ConnectToRedis(ctx, config)
-}
+//func (s *apiServer) initRedisStore() {
+//	ctx, cancel := context.WithCancel(context.Background())
+//	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+//		cancel()
+//
+//		return nil
+//	}))
+//
+//	config := &storage.Config{
+//		Host:                  s.redisOptions.Host,
+//		Port:                  s.redisOptions.Port,
+//		Addrs:                 s.redisOptions.Addrs,
+//		MasterName:            s.redisOptions.MasterName,
+//		Username:              s.redisOptions.Username,
+//		Password:              s.redisOptions.Password,
+//		Database:              s.redisOptions.Database,
+//		MaxIdle:               s.redisOptions.MaxIdle,
+//		MaxActive:             s.redisOptions.MaxActive,
+//		Timeout:               s.redisOptions.Timeout,
+//		EnableCluster:         s.redisOptions.EnableCluster,
+//		UseSSL:                s.redisOptions.UseSSL,
+//		SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
+//	}
+//
+//	// try to connect to redis
+//	go storage.ConnectToRedis(ctx, config)
+//}

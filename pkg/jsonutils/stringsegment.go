@@ -21,6 +21,7 @@ import (
 )
 
 var (
+	// nolint
 	numberReg = regexp.MustCompile(`^\d+$`)
 )
 

@@ -52,7 +52,7 @@ func (this *JSONDict) Unmarshal(obj interface{}, keys ...string) error {
 
 func jsonUnmarshal(jo JSONObject, o interface{}, keys []string) error {
 	if len(keys) > 0 {
-		var err error = nil
+		var err error
 		jo, err = jo.Get(keys...)
 		if err != nil {
 			return errors.Wrap(err, "Get")

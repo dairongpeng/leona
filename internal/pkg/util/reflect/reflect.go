@@ -30,7 +30,7 @@ func ToGormDBMap(obj interface{}, fields []string) (map[string]interface{}, erro
 		reflectValue = reflect.ValueOf(obj).Elem()
 	}
 
-	ret := make(map[string]interface{}, 0)
+	ret := make(map[string]interface{})
 	for _, f := range fields {
 		fs, exist := reflectType.FieldByName(f)
 		if !exist {

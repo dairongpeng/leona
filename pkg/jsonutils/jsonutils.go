@@ -404,7 +404,7 @@ func parseDict(str []byte, offset int) (sortedmap.SSortedMap, int, error) {
 		return smap, offset, NewJSONError(str, offset, "{ not found")
 	}
 	var i = offset + 1
-	var e error = nil
+	var e error
 	var key string
 	var stop = false
 	for !stop && i < len(str) {
@@ -624,17 +624,17 @@ func Parse(str []byte) (JSONObject, error) {
 	var i = 0
 	i = skipEmpty(str, i)
 	var val JSONObject = nil
-	var e error = nil
+	var e error
 	if i < len(str) {
 		switch str[i] {
 		case '{':
 			val = &JSONDict{}
-			i, e = val.parse(str, i)
+			_, e = val.parse(str, i)
 		case '[':
 			val = &JSONArray{}
-			i, e = val.parse(str, i)
+			_, e = val.parse(str, i)
 		default:
-			val, i, e = parseJSONValue(str, i)
+			val, _, e = parseJSONValue(str, i)
 			// return nil, NewJSONError(str, i, "Invalid JSON string")
 		}
 		if e != nil {

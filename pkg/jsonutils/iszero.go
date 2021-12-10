@@ -19,7 +19,7 @@ func (this *JSONValue) IsZero() bool {
 }
 
 func (this *JSONBool) IsZero() bool {
-	return this.data == false
+	return !this.data
 }
 
 func (this *JSONInt) IsZero() bool {

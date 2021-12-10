@@ -51,9 +51,7 @@ func (this *JSONDict) CopyIncludes(includes ...string) *JSONDict {
 
 func (this *JSONArray) Copy() *JSONArray {
 	arr := NewArray()
-	for _, v := range this.data {
-		arr.data = append(arr.data, v)
-	}
+	arr.data = append(arr.data, this.data...)
 	return arr
 }
 
