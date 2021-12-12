@@ -31,7 +31,9 @@ import (
 
 // 初始化gin中间件和路由
 func initRouter(g *gin.Engine) {
+	// 初始化路由中间件
 	installMiddleware(g)
+	// 初始化api接口
 	installController(g)
 }
 

@@ -59,29 +59,30 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 	// 对优雅关停的实例添加监听信号
 	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
 
-	// 构建配置
+	// 构建通用的配置
 	genericConfig, err := buildGenericConfig(cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	// 构建配置
+	// 构建额外的配置
 	extraConfig, err := buildExtraConfig(cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	// 补全配置。再new实例
+	// 补全通用配置。再new实例（HTTP）
 	genericServer, err := genericConfig.Complete().New()
 	if err != nil {
 		return nil, err
 	}
-	// 补全配置。再new实例
+	// 补全额外配置。再new实例（GRPC）
 	extraServer, err := extraConfig.complete().New()
 	if err != nil {
 		return nil, err
 	}
 
+	// HTTP/GRPC服务的实例
 	server := &apiServer{
 		gs: gs,
 		// redisOptions:     cfg.RedisOptions,
@@ -93,9 +94,11 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 }
 
 func (s *apiServer) PrepareRun() preparedAPIServer {
+	// 初始化路由配置
 	initRouter(s.genericAPIServer.Engine)
 
-	// s.initRedisStore()
+	// 初始化redis数据库
+	//s.initRedisStore()
 
 	// 监听到信号后，执行回调，做一些收尾清理工作，优雅关停
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
@@ -114,6 +117,7 @@ func (s *apiServer) PrepareRun() preparedAPIServer {
 }
 
 func (s preparedAPIServer) Run() error {
+	// 启动GRPC server
 	go s.gRPCAPIServer.Run()
 
 	// start shutdown managers
@@ -122,6 +126,7 @@ func (s preparedAPIServer) Run() error {
 		log.Fatalf("start shutdown manager failed: %s", err.Error())
 	}
 
+	// 启动HTTP server
 	return s.genericAPIServer.Run()
 }
 

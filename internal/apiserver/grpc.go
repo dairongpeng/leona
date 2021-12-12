@@ -27,6 +27,7 @@ type grpcAPIServer struct {
 	address string
 }
 
+// Run 启动GRPC的server
 func (s *grpcAPIServer) Run() {
 	listen, err := net.Listen("tcp", s.address)
 	if err != nil {

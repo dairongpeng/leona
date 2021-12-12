@@ -209,6 +209,7 @@ func (a *App) buildCommand() {
 	}
 
 	var namedFlagSets cliflag.NamedFlagSets
+	// 将option的flag添加到cobra实例的flagSet中
 	if a.options != nil {
 		namedFlagSets = a.options.Flags()
 		fs := cmd.Flags()

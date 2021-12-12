@@ -48,7 +48,7 @@ func run(opts *options.Options) app.RunFunc {
 		log.Init(opts.Log)
 		defer log.Flush()
 
-		// Build application configuration
+		// 构建应用配置
 		cfg, err := config.CreateConfigFromOptions(opts)
 		if err != nil {
 			return err
