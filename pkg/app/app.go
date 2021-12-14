@@ -257,6 +257,7 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
+		// 把配置文件中的值，赋值给options
 		if err := viper.Unmarshal(a.options); err != nil {
 			return err
 		}

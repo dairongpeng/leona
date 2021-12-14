@@ -49,7 +49,7 @@ func (s *ServerRunOptions) ApplyTo(c *server.Config) error {
 
 // Validate checks validation of ServerRunOptions.
 func (s *ServerRunOptions) Validate() []error {
-	errors := []error{}
+	var errors []error
 
 	return errors
 }

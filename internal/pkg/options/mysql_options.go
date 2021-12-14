@@ -51,7 +51,7 @@ func NewMySQLOptions() *MySQLOptions {
 
 // Validate verifies flags passed to MySQLOptions.
 func (o *MySQLOptions) Validate() []error {
-	errs := []error{}
+	var errs []error
 
 	return errs
 }

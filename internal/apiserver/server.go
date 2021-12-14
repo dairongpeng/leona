@@ -19,7 +19,6 @@ import (
 
 	pb "github.com/dairongpeng/leona/api/proto/apiserver/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/dairongpeng/leona/internal/apiserver/config"
@@ -145,11 +144,12 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
 
 // New create a grpcAPIServer instance.
 func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
-	creds, err := credentials.NewServerTLSFromFile(c.ServerCert.CertKey.CertFile, c.ServerCert.CertKey.KeyFile)
-	if err != nil {
-		log.Fatalf("Failed to generate credentials %s", err.Error())
-	}
-	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize), grpc.Creds(creds)}
+	// 注释证书相关内容
+	//creds, err := credentials.NewServerTLSFromFile(c.ServerCert.CertKey.CertFile, c.ServerCert.CertKey.KeyFile)
+	//if err != nil {
+	//	log.Fatalf("Failed to generate credentials %s", err.Error())
+	//}
+	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize)}
 	grpcServer := grpc.NewServer(opts...)
 
 	storeIns, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)

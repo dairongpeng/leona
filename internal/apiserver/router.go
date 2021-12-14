@@ -15,16 +15,10 @@
 package apiserver
 
 import (
-	"github.com/dairongpeng/leona/pkg/core"
-	"github.com/dairongpeng/leona/pkg/errors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/dairongpeng/leona/internal/apiserver/controller/v1/user"
 	"github.com/dairongpeng/leona/internal/apiserver/store/mysql"
-	"github.com/dairongpeng/leona/internal/pkg/code"
-	"github.com/dairongpeng/leona/internal/pkg/middleware"
-	"github.com/dairongpeng/leona/internal/pkg/middleware/auth"
-
 	// custom gin validators.
 	_ "github.com/dairongpeng/leona/pkg/validator"
 )
@@ -41,17 +35,18 @@ func installMiddleware(g *gin.Engine) {
 }
 
 func installController(g *gin.Engine) *gin.Engine {
-	// Middlewares.
-	jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
-	g.POST("/login", jwtStrategy.LoginHandler)
-	g.POST("/logout", jwtStrategy.LogoutHandler)
+	// Middlewares. 安全认证jwt相关
+	// jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
+	// g.POST("/login", jwtStrategy.LoginHandler)
+	// g.POST("/logout", jwtStrategy.LogoutHandler)
 	// Refresh time can be longer than token timeout
-	g.POST("/refresh", jwtStrategy.RefreshHandler)
+	// g.POST("/refresh", jwtStrategy.RefreshHandler)
 
-	auto := newAutoAuth()
-	g.NoRoute(auto.AuthFunc(), func(c *gin.Context) {
-		core.WriteResponse(c, errors.WithCode(code.ErrPageNotFound, "Page not found."), nil)
-	})
+	// 自动认证相关内容。构建中间件
+	//auto := newAutoAuth()
+	//g.NoRoute(auto.AuthFunc(), func(c *gin.Context) {
+	//	core.WriteResponse(c, errors.WithCode(code.ErrPageNotFound, "Page not found."), nil)
+	//})
 
 	// v1 handlers, requiring authentication
 	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
@@ -63,7 +58,7 @@ func installController(g *gin.Engine) *gin.Engine {
 			userController := user.NewUserController(storeIns)
 
 			userv1.POST("", userController.Create)
-			userv1.Use(auto.AuthFunc(), middleware.Validation())
+			// userv1.Use(auto.AuthFunc(), middleware.Validation())
 			// v1.PUT("/find_password", userController.FindPassword)
 			userv1.DELETE("", userController.DeleteCollection) // admin api
 			userv1.DELETE(":name", userController.Delete)      // admin api
@@ -73,7 +68,7 @@ func installController(g *gin.Engine) *gin.Engine {
 			userv1.GET(":name", userController.Get) // admin api
 		}
 
-		v1.Use(auto.AuthFunc())
+		// v1.Use(auto.AuthFunc())
 
 		// policy RESTful resource
 		//policyv1 := v1.Group("/policies", middleware.Publish())
