@@ -33,6 +33,7 @@ require (
 	github.com/novalagung/gubrak v1.0.0
 	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/ory/ladon v1.2.0
+	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
 	github.com/sirupsen/logrus v1.8.1
