@@ -15,20 +15,25 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gammazero/workerpool"
+	"context"
+	"github.com/mdlayher/schedgroup"
+	"log"
+	"time"
 )
 
 func main() {
-	wp := workerpool.New(2)
-	requests := []string{"alpha", "beta", "gamma", "delta", "epsilon"}
+	sg := schedgroup.New(context.Background())
 
-	for _, r := range requests {
-		r := r
-		wp.Submit(func() {
-			fmt.Println("Handling request:", r)
+	// 设置子任务分别在100、200、300ms之后执行
+	for i := 0; i < 3; i++ {
+		n := i + 1
+		sg.Delay(time.Duration(n)*1000*time.Millisecond, func() {
+			log.Println(n) //输出任务编号
 		})
 	}
 
-	wp.StopWait()
+	// 等待所有的子任务都完成
+	if err := sg.Wait(); err != nil {
+		log.Fatalf("failed to wait: %v", err)
+	}
 }

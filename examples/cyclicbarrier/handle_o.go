@@ -14,21 +14,13 @@
 
 package main
 
-import (
-	"fmt"
-	"github.com/gammazero/workerpool"
-)
+import "context"
 
-func main() {
-	wp := workerpool.New(2)
-	requests := []string{"alpha", "beta", "gamma", "delta", "epsilon"}
+// oxygen 氧原子处理流水线
+func (h2o *H2O) oxygen(releaseOxygen func()) {
+	h2o.semaO.Acquire(context.Background(), 1)
 
-	for _, r := range requests {
-		r := r
-		wp.Submit(func() {
-			fmt.Println("Handling request:", r)
-		})
-	}
-
-	wp.StopWait()
+	releaseOxygen()                   // 输出O
+	h2o.b.Await(context.Background()) //等待栅栏放行
+	h2o.semaO.Release(1)              // 释放氢原子空槽
 }

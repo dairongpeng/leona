@@ -28,8 +28,10 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jinzhu/now v1.1.3
 	github.com/json-iterator/go v1.1.11
+	github.com/marusama/cyclicbarrier v1.1.0
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mdlayher/schedgroup v0.0.0-20200506182200-45678742bdc7
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
 	github.com/novalagung/gubrak v1.0.0
 	github.com/onsi/gomega v1.16.0 // indirect
@@ -45,6 +47,7 @@ require (
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tpkeeper/gin-dump v1.0.1
+	github.com/vardius/gollback v1.1.0
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.etcd.io/etcd/api/v3 v3.5.1
 	go.etcd.io/etcd/client/v3 v3.5.1
