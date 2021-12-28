@@ -47,3 +47,10 @@ func TestRandString(t *testing.T) {
 	assert.Equal(t, 255, len(str))
 	t.Log(str)
 }
+
+func TestNewSecretID(t *testing.T) {
+	id := NewSecretID()
+	key := NewSecretKey()
+	fmt.Println(id)
+	fmt.Println(key)
+}

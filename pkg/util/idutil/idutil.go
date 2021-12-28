@@ -18,7 +18,7 @@ import (
 	"crypto/rand"
 
 	"github.com/sony/sonyflake"
-	hashids "github.com/speps/go-hashids"
+	"github.com/speps/go-hashids"
 
 	"github.com/dairongpeng/leona/pkg/util/iputil"
 	"github.com/dairongpeng/leona/pkg/util/stringutil"
