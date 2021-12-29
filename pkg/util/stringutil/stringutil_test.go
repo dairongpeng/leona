@@ -14,7 +14,11 @@
 
 package stringutil
 
-import "testing"
+import (
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 func TestDiff(t *testing.T) {
 	testCase := [][]string{
@@ -25,4 +29,10 @@ func TestDiff(t *testing.T) {
 	if len(result) != 1 || result[0] != "hello" {
 		t.Fatalf("Diff failed")
 	}
+}
+
+func TestDecodeBase64(t *testing.T) {
+	base64, err := DecodeBase64("dairongpeng")
+	assert.NoError(t, err)
+	fmt.Println(string(base64))
 }
