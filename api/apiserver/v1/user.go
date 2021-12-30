@@ -15,6 +15,7 @@
 package v1
 
 import (
+	"github.com/dairongpeng/leona/pkg/auth"
 	"time"
 
 	"github.com/dairongpeng/leona/pkg/json"
@@ -68,12 +69,12 @@ func (u *User) TableName() string {
 	return "user"
 }
 
-//// Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
-//func (u *User) Compare(pwd string) (err error) {
-//	err = auth.Compare(u.Password, pwd)
-//
-//	return
-//}
+// Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
+func (u *User) Compare(pwd string) (err error) {
+	err = auth.Compare(u.Password, pwd)
+
+	return
+}
 
 // BeforeCreate run before create database record.
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

@@ -40,16 +40,16 @@ func (u *User) ValidateUpdate() field.ErrorList {
 	return allErrs
 }
 
-// Validate validates that a secret object is valid.
-func (s *Secret) Validate() field.ErrorList {
-	val := validation.NewValidator(s)
-
-	return val.Validate()
-}
-
-// Validate validates that a policy object is valid.
-func (p *Policy) Validate() field.ErrorList {
-	val := validation.NewValidator(p)
-
-	return val.Validate()
-}
+//// Validate validates that a secret object is valid.
+//func (s *Secret) Validate() field.ErrorList {
+//	val := validation.NewValidator(s)
+//
+//	return val.Validate()
+//}
+//
+//// Validate validates that a policy object is valid.
+//func (p *Policy) Validate() field.ErrorList {
+//	val := validation.NewValidator(p)
+//
+//	return val.Validate()
+//}

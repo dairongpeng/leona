@@ -108,12 +108,6 @@ func cleanDatabase(db *gorm.DB) error {
 	if err := db.Migrator().DropTable(&v1.User{}); err != nil {
 		return errors.Wrap(err, "drop user table failed")
 	}
-	if err := db.Migrator().DropTable(&v1.Policy{}); err != nil {
-		return errors.Wrap(err, "drop policy table failed")
-	}
-	if err := db.Migrator().DropTable(&v1.Secret{}); err != nil {
-		return errors.Wrap(err, "drop secret table failed")
-	}
 
 	return nil
 }
@@ -124,12 +118,6 @@ func cleanDatabase(db *gorm.DB) error {
 func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&v1.User{}); err != nil {
 		return errors.Wrap(err, "migrate user model failed")
-	}
-	if err := db.AutoMigrate(&v1.Policy{}); err != nil {
-		return errors.Wrap(err, "migrate policy model failed")
-	}
-	if err := db.AutoMigrate(&v1.Secret{}); err != nil {
-		return errors.Wrap(err, "migrate secret model failed")
 	}
 
 	return nil
