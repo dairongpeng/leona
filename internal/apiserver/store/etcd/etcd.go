@@ -63,18 +63,6 @@ func (ds *datastore) Users() store.UserStore {
 	return newUsers(ds)
 }
 
-func (ds *datastore) Secrets() store.SecretStore {
-	return newSecrets(ds)
-}
-
-func (ds *datastore) Policies() store.PolicyStore {
-	return newPolicies(ds)
-}
-
-func (ds *datastore) PolicyAudits() store.PolicyAuditStore {
-	return newPolicyAudits(ds)
-}
-
 // Close clsoe the etcdStore clinet.
 func (ds *datastore) Close() error {
 	if ds.cli != nil {

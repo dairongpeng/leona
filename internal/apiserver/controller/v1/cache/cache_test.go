@@ -12,58 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package user
+// Package cache defines a cache service which can return all secrets and policies.
+package cache
 
 import (
-	"net/http"
-	"net/http/httptest"
+	"reflect"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 
-	srvv1 "github.com/dairongpeng/leona/internal/apiserver/service/v1"
+	"github.com/dairongpeng/leona/internal/apiserver/store"
 )
 
-func TestUserController_DeleteCollection(t *testing.T) {
+func TestGetCacheInsOr(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockService := srvv1.NewMockService(ctrl)
-	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
-	mockUserSrv.EXPECT().DeleteCollection(gomock.Any(), gomock.Eq([]string{"colin", "john"}), gomock.Any()).Return(nil)
-	mockService.EXPECT().Users().Return(mockUserSrv)
+	mockFactory := store.NewMockFactory(ctrl)
 
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
-	c.Request, _ = http.NewRequest("DELETE", "/v1/users?name=colin&name=john", nil)
-
-	type fields struct {
-		srv srvv1.Service
-	}
 	type args struct {
-		c *gin.Context
+		store store.Factory
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
+		name    string
+		args    args
+		want    *Cache
+		wantErr bool
 	}{
 		{
 			name: "default",
-			fields: fields{
-				srv: mockService,
-			},
 			args: args{
-				c: c,
+				store: mockFactory,
 			},
+			want: &Cache{
+				store: mockFactory,
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := &UserController{
-				srv: tt.fields.srv,
+			got, err := GetCacheInsOr(tt.args.store)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetCacheInsOr() error = %v, wantErr %v", err, tt.wantErr)
+				return
 			}
-			u.DeleteCollection(tt.args.c)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetCacheInsOr() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

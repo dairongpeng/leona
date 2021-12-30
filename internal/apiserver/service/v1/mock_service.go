@@ -49,34 +49,6 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
-// Policies mocks base method.
-func (m *MockService) Policies() PolicySrv {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Policies")
-	ret0, _ := ret[0].(PolicySrv)
-	return ret0
-}
-
-// Policies indicates an expected call of Policies.
-func (mr *MockServiceMockRecorder) Policies() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Policies", reflect.TypeOf((*MockService)(nil).Policies))
-}
-
-// Secrets mocks base method.
-func (m *MockService) Secrets() SecretSrv {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Secrets")
-	ret0, _ := ret[0].(SecretSrv)
-	return ret0
-}
-
-// Secrets indicates an expected call of Secrets.
-func (mr *MockServiceMockRecorder) Secrets() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Secrets", reflect.TypeOf((*MockService)(nil).Secrets))
-}
-
 // Users mocks base method.
 func (m *MockService) Users() UserSrv {
 	m.ctrl.T.Helper()
@@ -154,20 +126,6 @@ func (m *MockUserSrv) Delete(arg0 context.Context, arg1 string, arg2 v10.DeleteO
 func (mr *MockUserSrvMockRecorder) Delete(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserSrv)(nil).Delete), arg0, arg1, arg2)
-}
-
-// DeleteCollection mocks base method.
-func (m *MockUserSrv) DeleteCollection(arg0 context.Context, arg1 []string, arg2 v10.DeleteOptions) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteCollection", arg0, arg1, arg2)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeleteCollection indicates an expected call of DeleteCollection.
-func (mr *MockUserSrvMockRecorder) DeleteCollection(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCollection", reflect.TypeOf((*MockUserSrv)(nil).DeleteCollection), arg0, arg1, arg2)
 }
 
 // Get mocks base method.
@@ -252,20 +210,6 @@ func (m *MockSecretSrv) EXPECT() *MockSecretSrvMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
-func (m *MockSecretSrv) Create(arg0 context.Context, arg1 *v1.Secret, arg2 v10.CreateOptions) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", arg0, arg1, arg2)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Create indicates an expected call of Create.
-func (mr *MockSecretSrvMockRecorder) Create(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockSecretSrv)(nil).Create), arg0, arg1, arg2)
-}
-
 // Delete mocks base method.
 func (m *MockSecretSrv) Delete(arg0 context.Context, arg1, arg2 string, arg3 v10.DeleteOptions) error {
 	m.ctrl.T.Helper()
@@ -294,50 +238,6 @@ func (mr *MockSecretSrvMockRecorder) DeleteCollection(arg0, arg1, arg2, arg3 int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCollection", reflect.TypeOf((*MockSecretSrv)(nil).DeleteCollection), arg0, arg1, arg2, arg3)
 }
 
-// Get mocks base method.
-func (m *MockSecretSrv) Get(arg0 context.Context, arg1, arg2 string, arg3 v10.GetOptions) (*v1.Secret, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", arg0, arg1, arg2, arg3)
-	ret0, _ := ret[0].(*v1.Secret)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Get indicates an expected call of Get.
-func (mr *MockSecretSrvMockRecorder) Get(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockSecretSrv)(nil).Get), arg0, arg1, arg2, arg3)
-}
-
-// List mocks base method.
-func (m *MockSecretSrv) List(arg0 context.Context, arg1 string, arg2 v10.ListOptions) (*v1.SecretList, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", arg0, arg1, arg2)
-	ret0, _ := ret[0].(*v1.SecretList)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// List indicates an expected call of List.
-func (mr *MockSecretSrvMockRecorder) List(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockSecretSrv)(nil).List), arg0, arg1, arg2)
-}
-
-// Update mocks base method.
-func (m *MockSecretSrv) Update(arg0 context.Context, arg1 *v1.Secret, arg2 v10.UpdateOptions) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Update indicates an expected call of Update.
-func (mr *MockSecretSrvMockRecorder) Update(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockSecretSrv)(nil).Update), arg0, arg1, arg2)
-}
-
 // MockPolicySrv is a mock of PolicySrv interface.
 type MockPolicySrv struct {
 	ctrl     *gomock.Controller
@@ -359,20 +259,6 @@ func NewMockPolicySrv(ctrl *gomock.Controller) *MockPolicySrv {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockPolicySrv) EXPECT() *MockPolicySrvMockRecorder {
 	return m.recorder
-}
-
-// Create mocks base method.
-func (m *MockPolicySrv) Create(arg0 context.Context, arg1 *v1.Policy, arg2 v10.CreateOptions) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", arg0, arg1, arg2)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Create indicates an expected call of Create.
-func (mr *MockPolicySrvMockRecorder) Create(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockPolicySrv)(nil).Create), arg0, arg1, arg2)
 }
 
 // Delete mocks base method.
@@ -401,48 +287,4 @@ func (m *MockPolicySrv) DeleteCollection(arg0 context.Context, arg1 string, arg2
 func (mr *MockPolicySrvMockRecorder) DeleteCollection(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCollection", reflect.TypeOf((*MockPolicySrv)(nil).DeleteCollection), arg0, arg1, arg2, arg3)
-}
-
-// Get mocks base method.
-func (m *MockPolicySrv) Get(arg0 context.Context, arg1, arg2 string, arg3 v10.GetOptions) (*v1.Policy, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", arg0, arg1, arg2, arg3)
-	ret0, _ := ret[0].(*v1.Policy)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Get indicates an expected call of Get.
-func (mr *MockPolicySrvMockRecorder) Get(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockPolicySrv)(nil).Get), arg0, arg1, arg2, arg3)
-}
-
-// List mocks base method.
-func (m *MockPolicySrv) List(arg0 context.Context, arg1 string, arg2 v10.ListOptions) (*v1.PolicyList, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", arg0, arg1, arg2)
-	ret0, _ := ret[0].(*v1.PolicyList)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// List indicates an expected call of List.
-func (mr *MockPolicySrvMockRecorder) List(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockPolicySrv)(nil).List), arg0, arg1, arg2)
-}
-
-// Update mocks base method.
-func (m *MockPolicySrv) Update(arg0 context.Context, arg1 *v1.Policy, arg2 v10.UpdateOptions) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Update indicates an expected call of Update.
-func (mr *MockPolicySrvMockRecorder) Update(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockPolicySrv)(nil).Update), arg0, arg1, arg2)
 }

@@ -21,9 +21,6 @@ var client Factory
 // Factory defines the leona platform storage interface.
 type Factory interface {
 	Users() UserStore
-	Secrets() SecretStore
-	Policies() PolicyStore
-	PolicyAudits() PolicyAuditStore
 	Close() error
 }
 

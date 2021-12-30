@@ -47,12 +47,6 @@ func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOpt
 
 // Delete deletes the user by the user identifier.
 func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
-	// delete related policy first
-	pol := newPolicies(&datastore{u.db})
-	if err := pol.DeleteByUser(ctx, username, opts); err != nil {
-		return err
-	}
-
 	if opts.Unscoped {
 		u.db = u.db.Unscoped()
 	}
@@ -67,12 +61,6 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 
 // DeleteCollection batch deletes the users.
 func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
-	// delete related policy first
-	pol := newPolicies(&datastore{u.db})
-	if err := pol.DeleteCollectionByUser(ctx, usernames, opts); err != nil {
-		return err
-	}
-
 	if opts.Unscoped {
 		u.db = u.db.Unscoped()
 	}

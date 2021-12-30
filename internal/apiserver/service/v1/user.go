@@ -33,7 +33,6 @@ type UserSrv interface {
 	Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error
 	Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error
 	Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error
-	DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error
 	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
 	ListWithBadPerformance(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
@@ -74,12 +73,12 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 			defer wg.Done()
 
 			// some cost time process
-			policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
-			if err != nil {
-				errChan <- errors.WithCode(code.ErrDatabase, err.Error())
-
-				return
-			}
+			//policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
+			//if err != nil {
+			//	errChan <- errors.WithCode(code.ErrDatabase, err.Error())
+			//
+			//	return
+			//}
 
 			m.Store(user.ID, &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
@@ -90,10 +89,10 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 					CreatedAt:  user.CreatedAt,
 					UpdatedAt:  user.UpdatedAt,
 				},
-				Nickname:    user.Nickname,
-				Email:       user.Email,
-				Phone:       user.Phone,
-				TotalPolicy: policies.TotalCount,
+				Nickname: user.Nickname,
+				Email:    user.Email,
+				Phone:    user.Phone,
+				//TotalPolicy: policies.TotalCount,
 			})
 		}(user)
 	}
@@ -131,10 +130,10 @@ func (u *userService) ListWithBadPerformance(ctx context.Context, opts metav1.Li
 
 	infos := make([]*v1.User, 0)
 	for _, user := range users.Items {
-		policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
-		if err != nil {
-			return nil, errors.WithCode(code.ErrDatabase, err.Error())
-		}
+		//policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
+		//if err != nil {
+		//	return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		//}
 
 		infos = append(infos, &v1.User{
 			ObjectMeta: metav1.ObjectMeta{
@@ -143,10 +142,10 @@ func (u *userService) ListWithBadPerformance(ctx context.Context, opts metav1.Li
 				CreatedAt: user.CreatedAt,
 				UpdatedAt: user.UpdatedAt,
 			},
-			Nickname:    user.Nickname,
-			Email:       user.Email,
-			Phone:       user.Phone,
-			TotalPolicy: policies.TotalCount,
+			Nickname: user.Nickname,
+			Email:    user.Email,
+			Phone:    user.Phone,
+			//TotalPolicy: policies.TotalCount,
 		})
 	}
 
@@ -159,14 +158,6 @@ func (u *userService) Create(ctx context.Context, user *v1.User, opts metav1.Cre
 			return errors.WithCode(code.ErrUserAlreadyExist, err.Error())
 		}
 
-		return errors.WithCode(code.ErrDatabase, err.Error())
-	}
-
-	return nil
-}
-
-func (u *userService) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
-	if err := u.store.Users().DeleteCollection(ctx, usernames, opts); err != nil {
 		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 

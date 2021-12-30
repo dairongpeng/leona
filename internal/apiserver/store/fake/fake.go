@@ -19,11 +19,8 @@ import (
 	"sync"
 
 	v1 "github.com/dairongpeng/leona/api/apiserver/v1"
-	metav1 "github.com/dairongpeng/leona/pkg/meta/v1"
-	"github.com/dairongpeng/leona/pkg/util/idutil"
-	"github.com/ory/ladon"
-
 	"github.com/dairongpeng/leona/internal/apiserver/store"
+	metav1 "github.com/dairongpeng/leona/pkg/meta/v1"
 )
 
 // ResourceCount defines the number of fake resources.
@@ -31,25 +28,11 @@ const ResourceCount = 1000
 
 type datastore struct {
 	sync.RWMutex
-	users    []*v1.User
-	secrets  []*v1.Secret
-	policies []*v1.Policy
+	users []*v1.User
 }
 
 func (ds *datastore) Users() store.UserStore {
 	return newUsers(ds)
-}
-
-func (ds *datastore) Secrets() store.SecretStore {
-	return newSecrets(ds)
-}
-
-func (ds *datastore) Policies() store.PolicyStore {
-	return newPolicies(ds)
-}
-
-func (ds *datastore) PolicyAudits() store.PolicyAuditStore {
-	return newPolicyAudits(ds)
 }
 
 func (ds *datastore) Close() error {
@@ -65,9 +48,7 @@ var (
 func GetFakeFactoryOr() (store.Factory, error) {
 	once.Do(func() {
 		fakeFactory = &datastore{
-			users:    FakeUsers(ResourceCount),
-			secrets:  FakeSecrets(ResourceCount),
-			policies: FakePolicies(ResourceCount),
+			users: FakeUsers(ResourceCount),
 		}
 	})
 
@@ -95,41 +76,4 @@ func FakeUsers(count int) []*v1.User {
 	}
 
 	return users
-}
-
-// FakeSecrets returns fake secret data.
-func FakeSecrets(count int) []*v1.Secret {
-	secrets := make([]*v1.Secret, 0)
-	for i := 1; i <= count; i++ {
-		secrets = append(secrets, &v1.Secret{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: fmt.Sprintf("secret%d", i),
-				ID:   uint64(i),
-			},
-			Username:  fmt.Sprintf("user%d", i),
-			SecretID:  idutil.NewSecretID(),
-			SecretKey: idutil.NewSecretKey(),
-		})
-	}
-
-	return secrets
-}
-
-// FakePolicies returns fake policy data.
-func FakePolicies(count int) []*v1.Policy {
-	policies := make([]*v1.Policy, 0)
-	for i := 1; i <= count; i++ {
-		policies = append(policies, &v1.Policy{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: fmt.Sprintf("policy%d", i),
-				ID:   uint64(i),
-			},
-			Username: fmt.Sprintf("user%d", i),
-			Policy: v1.AuthzPolicy{
-				DefaultPolicy: ladon.DefaultPolicy{},
-			},
-		})
-	}
-
-	return policies
 }

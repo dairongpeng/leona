@@ -45,8 +45,7 @@ func installController(g *gin.Engine) *gin.Engine {
 		{
 			userController := user.NewUserController(storeIns)
 			userv1.POST("", userController.Create)
-			userv1.DELETE("", userController.DeleteCollection) // admin api
-			userv1.DELETE(":name", userController.Delete)      // admin api
+			userv1.DELETE(":name", userController.Delete) // admin api
 			userv1.PUT(":name/change-password", userController.ChangePassword)
 			userv1.PUT(":name", userController.Update)
 			userv1.GET("", userController.List)

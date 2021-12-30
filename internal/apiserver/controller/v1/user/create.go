@@ -21,6 +21,7 @@ import (
 	"github.com/dairongpeng/leona/pkg/errors"
 	metav1 "github.com/dairongpeng/leona/pkg/meta/v1"
 	"github.com/gin-gonic/gin"
+	"time"
 
 	"github.com/dairongpeng/leona/internal/pkg/code"
 	"github.com/dairongpeng/leona/pkg/log"
@@ -45,6 +46,8 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 
 	r.Password, _ = auth.Encrypt(r.Password)
+	r.Status = 1
+	r.LoginedAt = time.Now()
 
 	// Insert the user to the storage.
 	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
