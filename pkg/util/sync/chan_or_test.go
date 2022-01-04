@@ -12,21 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package fake
+package sync
 
 import (
-	"context"
+	"fmt"
+	"testing"
+	"time"
 )
 
-type policyAudit struct {
-	ds *datastore
+func sig(after time.Duration) <-chan interface{} {
+	c := make(chan interface{})
+	go func() {
+		defer close(c)
+		time.Sleep(after)
+	}()
+	return c
 }
 
-func newPolicyAudits(ds *datastore) *policyAudit {
-	return &policyAudit{ds}
-}
+func TestChanOr(t *testing.T) {
+	start := time.Now()
 
-// ClearOutdated clear data older than a given days.
-func (p *policyAudit) ClearOutdated(ctx context.Context, maxReserveDays int) (int64, error) {
-	return 0, nil
+	<-Or(
+		sig(10*time.Second),
+		sig(20*time.Second),
+		sig(30*time.Second),
+		sig(40*time.Second),
+		sig(50*time.Second),
+		sig(01*time.Minute),
+	)
+
+	fmt.Printf("done after %v", time.Since(start))
 }

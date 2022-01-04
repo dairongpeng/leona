@@ -12,21 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package secret
+package sync
 
-import (
-	srvv1 "github.com/dairongpeng/leona/internal/apiserver/service/v1"
-	"github.com/dairongpeng/leona/internal/apiserver/store"
-)
+import "sync"
 
-// SecretController create a secret handler used to handle request for secret resource.
-type SecretController struct {
-	srv srvv1.Service
+// 基于chan实现信号量Semaphore 数据结构，并且还实现了Locker接口
+type semaphore struct {
+	sync.Locker
+	ch chan struct{}
 }
 
-// NewSecretController creates a secret handler.
-func NewSecretController(store store.Factory) *SecretController {
-	return &SecretController{
-		srv: srvv1.NewService(store),
+// NewSemaphore 创建一个新的信号量
+func NewSemaphore(capacity int) sync.Locker {
+	if capacity <= 0 {
+		capacity = 1 // 容量为1就变成了一个互斥锁
 	}
+	return &semaphore{ch: make(chan struct{}, capacity)}
+}
+
+// Lock 请求一个资源
+func (s *semaphore) Lock() {
+	s.ch <- struct{}{}
+}
+
+// Unlock 释放资源
+func (s *semaphore) Unlock() {
+	<-s.ch
 }
