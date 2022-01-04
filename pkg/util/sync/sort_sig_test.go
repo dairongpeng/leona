@@ -12,28 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package mysql
+package sync
 
-import (
-	"context"
-	"time"
+import "testing"
 
-	"gorm.io/gorm"
-)
+func TestSortSig(t *testing.T) {
+	chs := []chan Token{make(chan Token), make(chan Token), make(chan Token), make(chan Token)}
 
-type policyAudit struct {
-	db *gorm.DB
-}
+	// 创建4个worker
+	for i := 0; i < 4; i++ {
+		go NewWorker(i, chs[i], chs[(i+1)%4])
+	}
 
-func newPolicyAudits(ds *datastore) *policyAudit {
-	return &policyAudit{ds.db}
-}
+	//首先把令牌交给第一个worker
+	chs[0] <- struct{}{}
 
-// ClearOutdated clear data older than a given days.
-func (p *policyAudit) ClearOutdated(ctx context.Context, maxReserveDays int) (int64, error) {
-	date := time.Now().AddDate(0, 0, -maxReserveDays).Format("2006-01-02 15:04:05")
-
-	d := p.db.Exec("delete from policy_audit where deletedAt < ?", date)
-
-	return d.RowsAffected, d.Error
+	select {}
 }

@@ -12,21 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package policy
+package sync
 
 import (
-	srvv1 "github.com/dairongpeng/leona/internal/apiserver/service/v1"
-	"github.com/dairongpeng/leona/internal/apiserver/store"
+	"reflect"
 )
 
-// PolicyController create a policy handler used to handle request for policy resource.
-type PolicyController struct {
-	srv srvv1.Service
-}
+// CreateCases 基于反射构建动态select
+func CreateCases(chs ...chan int) []reflect.SelectCase {
+	var cases []reflect.SelectCase
 
-// NewPolicyController creates a policy handler.
-func NewPolicyController(store store.Factory) *PolicyController {
-	return &PolicyController{
-		srv: srvv1.NewService(store),
+	// 创建recv case
+	for _, ch := range chs {
+		cases = append(cases, reflect.SelectCase{
+			Dir:  reflect.SelectRecv,
+			Chan: reflect.ValueOf(ch),
+		})
 	}
+
+	// 创建send case
+	for i, ch := range chs {
+		v := reflect.ValueOf(i)
+		cases = append(cases, reflect.SelectCase{
+			Dir:  reflect.SelectSend,
+			Chan: reflect.ValueOf(ch),
+			Send: v,
+		})
+	}
+
+	return cases
 }

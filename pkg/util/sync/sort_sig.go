@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package etcd
+package sync
 
 import (
-	"context"
+	"fmt"
+	"time"
 )
 
-type policyAudit struct {
-	ds *datastore
-}
+type Token struct{}
 
-func newPolicyAudits(ds *datastore) *policyAudit {
-	return &policyAudit{ds}
-}
-
-// ClearOutdated clear data older than a given days.
-func (p *policyAudit) ClearOutdated(ctx context.Context, maxReserveDays int) (int64, error) {
-	return 0, nil
+// NewWorker 基于令牌信号传递goroutine的执行顺序
+func NewWorker(id int, ch chan Token, nextCh chan Token) {
+	for {
+		token := <-ch       // 取得令牌
+		fmt.Println(id + 1) // id从1开始
+		time.Sleep(time.Second)
+		nextCh <- token
+	}
 }

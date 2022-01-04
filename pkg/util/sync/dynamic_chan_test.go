@@ -12,13 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package store
+package sync
 
 import (
-	"context"
+	"fmt"
+	"reflect"
+	"testing"
 )
 
-// PolicyAuditStore defines the policy_audit storage interface.
-type PolicyAuditStore interface {
-	ClearOutdated(ctx context.Context, maxReserveDays int) (int64, error)
+func TestDynamicChan(t *testing.T) {
+	var ch1 = make(chan int, 10)
+	var ch2 = make(chan int, 10)
+
+	// 创建SelectCase
+	var cases = CreateCases(ch1, ch2)
+
+	// 执行10次select
+	for i := 0; i < 10; i++ {
+		chosen, recv, ok := reflect.Select(cases)
+		if recv.IsValid() { // recv case
+			fmt.Println("recv:", cases[chosen].Dir, recv, ok)
+		} else { // send case
+			fmt.Println("send:", cases[chosen].Dir, ok)
+		}
+	}
 }
