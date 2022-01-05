@@ -15,9 +15,11 @@
 package user
 
 import (
+	"github.com/dairongpeng/leona/internal/apiserver/analytics"
 	"github.com/dairongpeng/leona/pkg/core"
 	metav1 "github.com/dairongpeng/leona/pkg/meta/v1"
 	"github.com/gin-gonic/gin"
+	"time"
 
 	"github.com/dairongpeng/leona/pkg/log"
 )
@@ -32,6 +34,15 @@ func (u *UserController) Delete(c *gin.Context) {
 
 		return
 	}
+
+	// 收集数据
+	record := analytics.AnalyticsRecord{
+		TimeStamp: time.Now().Unix(),
+		Username:  "-",
+		Effect:    "delete",
+	}
+	record.SetExpiry(0)
+	_ = analytics.GetAnalytics().RecordHit(&record)
 
 	core.WriteResponse(c, nil, nil)
 }

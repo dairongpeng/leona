@@ -54,21 +54,21 @@ mysql:
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
   log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
-## Redis 配置
-#redis:
-#  host: ${REDIS_HOST} # redis 地址，默认 127.0.0.1:6379
-#  port: ${REDIS_PORT} # redis 端口，默认 6379
-#  password: ${REDIS_PASSWORD} # redis 密码
-#  #addrs:
-#  #master-name: # redis 集群 master 名称
-#  #username: # redis 登录用户名
-#  #database: # redis 数据库
-#  #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
-#  #optimisation-max-active: # 最大活跃连接数
-#  #timeout: # 连接 redis 时的超时时间
-#  #enable-cluster: # 是否开启集群模式
-#  #use-ssl: # 是否启用 TLS
-#  #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
+# Redis 配置
+redis:
+  host: 127.0.0.1 # redis 地址，默认 127.0.0.1
+  port: 6379 # redis 端口，默认 6379
+  password: abc123 # redis 密码
+  #addrs:
+  #master-name: # redis 集群 master 名称
+  #username: # redis 登录用户名
+  #database: # redis 数据库
+  #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
+  #optimisation-max-active: # 最大活跃连接数
+  #timeout: # 连接 redis 时的超时时间
+  #enable-cluster: # 是否开启集群模式
+  #use-ssl: # 是否启用 TLS
+  #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
 
 ## JWT 配置
 #jwt:
@@ -87,6 +87,14 @@ log:
   disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息
   output-paths: /Users/dairongpeng/workspace/go-workspace/leona/leona-apiserver.log,stdout # 支持输出到多个输出，逗号分开。支持输出到标准输出（stdout）和文件。
   error-output-paths: /Users/dairongpeng/workspace/go-workspace/leona/leona-apiserver.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
+
+analytics:
+  enable: true # 设置为 true 后 leona-api-server 会记录授权审计日志
+  pool-size: 50 # 指定 worker 的个数，默认 50
+  records-buffer-size:  2000 # 缓存的授权日志消息数
+  flush-interval: 200 # 超时投递时间，单位：毫秒，0 < flush-interval <= 1000。
+  enable-detailed-recording: true # 开启记录详情，详细记录的功能
+  storage-expiration-time: 24h0m0s # key 过期时间
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics

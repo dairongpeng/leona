@@ -16,6 +16,7 @@
 package options
 
 import (
+	"github.com/dairongpeng/leona/internal/apiserver/analytics"
 	genericoptions "github.com/dairongpeng/leona/internal/pkg/options"
 	"github.com/dairongpeng/leona/internal/pkg/server"
 	cliflag "github.com/dairongpeng/leona/pkg/cli/flag"
@@ -30,10 +31,11 @@ type Options struct {
 	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	// SecureServing           *genericoptions.SecureServingOptions   `json:"secure"   mapstructure:"secure"`
 	MySQLOptions *genericoptions.MySQLOptions `json:"mysql"    mapstructure:"mysql"`
-	// RedisOptions            *genericoptions.RedisOptions           `json:"redis"    mapstructure:"redis"`
+	RedisOptions *genericoptions.RedisOptions `json:"redis"    mapstructure:"redis"`
 	// JwtOptions              *genericoptions.JwtOptions             `json:"jwt"      mapstructure:"jwt"`
-	Log            *log.Options                   `json:"log"      mapstructure:"log"`
-	FeatureOptions *genericoptions.FeatureOptions `json:"feature"  mapstructure:"feature"`
+	Log              *log.Options                   `json:"log"      mapstructure:"log"`
+	FeatureOptions   *genericoptions.FeatureOptions `json:"feature"  mapstructure:"feature"`
+	AnalyticsOptions *analytics.AnalyticsOptions    `json:"analytics"      mapstructure:"analytics"`
 }
 
 // NewOptions creates a new Options object with default parameters.
@@ -44,10 +46,11 @@ func NewOptions() *Options {
 		InsecureServing:         genericoptions.NewInsecureServingOptions(),
 		// SecureServing:           genericoptions.NewSecureServingOptions(),
 		MySQLOptions: genericoptions.NewMySQLOptions(),
-		// RedisOptions:            genericoptions.NewRedisOptions(),
+		RedisOptions: genericoptions.NewRedisOptions(),
 		// JwtOptions:              genericoptions.NewJwtOptions(),
-		Log:            log.NewOptions(),
-		FeatureOptions: genericoptions.NewFeatureOptions(),
+		Log:              log.NewOptions(),
+		FeatureOptions:   genericoptions.NewFeatureOptions(),
+		AnalyticsOptions: analytics.NewAnalyticsOptions(),
 	}
 
 	return &o

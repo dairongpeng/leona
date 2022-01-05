@@ -25,7 +25,6 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/gosuri/uitable v0.0.4
 	github.com/h2non/filetype v1.1.1
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jinzhu/now v1.1.3
 	github.com/json-iterator/go v1.1.11
 	github.com/marusama/cyclicbarrier v1.1.0
@@ -35,7 +34,6 @@ require (
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
 	github.com/novalagung/gubrak v1.0.0
 	github.com/onsi/gomega v1.16.0 // indirect
-	github.com/ory/ladon v1.2.0
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
@@ -60,6 +58,7 @@ require (
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
+	gopkg.in/vmihailenco/msgpack.v2 v2.9.2
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/mysql v1.2.1
 	gorm.io/gorm v1.22.4
