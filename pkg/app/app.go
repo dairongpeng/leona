@@ -293,6 +293,7 @@ func (a *App) applyOptionRules() error {
 	//	}
 	//}
 
+	// option全部加载完毕后，统一检查错误
 	if errs := a.options.Validate(); len(errs) != 0 {
 		return errors.NewAggregate(errs)
 	}

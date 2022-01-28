@@ -12,17 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package config defines gstash configuration.
 package config
-
-import "github.com/dairongpeng/leona/internal/apiserver/options"
-
-// Config is the running configuration structure of the LEONA gstash service.
-type Config struct {
-	*options.Options
-}
-
-// CreateConfigFromOptions creates a running configuration instance based
-// on a given LEONA gstash command line or configuration file option.
-func CreateConfigFromOptions(opts *options.Options) (*Config, error) {
-	return &Config{opts}, nil
-}

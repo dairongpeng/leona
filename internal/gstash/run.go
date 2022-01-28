@@ -12,17 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package gstash
 
-import "github.com/dairongpeng/leona/internal/apiserver/options"
+import (
+	"github.com/dairongpeng/leona/internal/gstash/config"
+	genericapiserver "github.com/dairongpeng/leona/internal/pkg/server"
+)
 
-// Config is the running configuration structure of the LEONA gstash service.
-type Config struct {
-	*options.Options
-}
+// Run runs the specified gstash server. This should never exit.
+func Run(cfg *config.Config, stopCh <-chan struct{}) error {
+	go genericapiserver.ServeHealthCheck(cfg.HealthCheckPath, cfg.HealthCheckAddress)
 
-// CreateConfigFromOptions creates a running configuration instance based
-// on a given LEONA gstash command line or configuration file option.
-func CreateConfigFromOptions(opts *options.Options) (*Config, error) {
-	return &Config{opts}, nil
+	// 启动gstash server
+	server, err := createGstashServer(cfg)
+	if err != nil {
+		return err
+	}
+
+	return server.PrepareRun().Run(stopCh)
 }

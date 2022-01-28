@@ -36,9 +36,13 @@ func SetupSignalHandler() <-chan struct{} {
 	signal.Notify(shutdownHandler, shutdownSignals...)
 
 	go func() {
+		// 第一次中断信号是操作系统发出的，通知当前进程进行后续处理
 		<-shutdownHandler
+		// 通知当前进程，当前进程进行完收尾工作后，再次发从一个中断信号到shutdownHandler
 		close(stop)
+		// 第二个中断信号是应用程序发的，说明当前进程的收尾工作已经进行完毕，保证安全停止应用应用进程。保证数据不会丢
 		<-shutdownHandler
+		// 收到第二个终端信号后，调用操作系统退出当前进程
 		os.Exit(1) // second signal. Exit directly.
 	}()
 

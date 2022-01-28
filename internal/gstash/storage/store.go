@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+// Package storage defines storages which store the analytics data from iam-authz-server.
+package storage
 
-import "github.com/dairongpeng/leona/internal/apiserver/options"
-
-// Config is the running configuration structure of the LEONA gstash service.
-type Config struct {
-	*options.Options
+// AnalyticsStorage defines the analytics storage interface.
+type AnalyticsStorage interface {
+	Init(config interface{}) error
+	GetName() string
+	Connect() bool
+	GetAndDeleteSet(string) []interface{}
 }
 
-// CreateConfigFromOptions creates a running configuration instance based
-// on a given LEONA gstash command line or configuration file option.
-func CreateConfigFromOptions(opts *options.Options) (*Config, error) {
-	return &Config{opts}, nil
-}
+const (
+	// AnalyticsKeyName defines the key name in redis which used to analytics.
+	AnalyticsKeyName string = "iam-system-analytics"
+)

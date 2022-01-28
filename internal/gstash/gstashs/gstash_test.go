@@ -12,17 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package gstashs
 
-import "github.com/dairongpeng/leona/internal/apiserver/options"
+import (
+	"testing"
+)
 
-// Config is the running configuration structure of the LEONA gstash service.
-type Config struct {
-	*options.Options
-}
+func TestGetGstashByName(t *testing.T) {
+	name := "dummy"
+	pmpType, err := GetGstashByName(name)
 
-// CreateConfigFromOptions creates a running configuration instance based
-// on a given LEONA gstash command line or configuration file option.
-func CreateConfigFromOptions(opts *options.Options) (*Config, error) {
-	return &Config{opts}, nil
+	if err != nil || pmpType == nil {
+		t.Fail()
+	}
+
+	name2 := "xyz"
+	pmpType2, err2 := GetGstashByName(name2)
+
+	if err2 == nil || pmpType2 != nil {
+		t.Fail()
+	}
 }

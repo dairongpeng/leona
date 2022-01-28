@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package options
 
-import "github.com/dairongpeng/leona/internal/apiserver/options"
+// Validate checks Options and return a slice of found errs.
+func (o *Options) Validate() []error {
+	var errs []error
 
-// Config is the running configuration structure of the LEONA gstash service.
-type Config struct {
-	*options.Options
-}
+	errs = append(errs, o.RedisOptions.Validate()...)
+	errs = append(errs, o.Log.Validate()...)
 
-// CreateConfigFromOptions creates a running configuration instance based
-// on a given LEONA gstash command line or configuration file option.
-func CreateConfigFromOptions(opts *options.Options) (*Config, error) {
-	return &Config{opts}, nil
+	return errs
 }

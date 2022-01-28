@@ -26,7 +26,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/gosuri/uitable v0.0.4
 	github.com/h2non/filetype v1.1.1
-	github.com/influxdata/influxdb v1.9.5
+	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jinzhu/now v1.1.3
 	github.com/json-iterator/go v1.1.11
 	github.com/kelseyhightower/envconfig v1.4.0
@@ -56,7 +56,6 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.5
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.etcd.io/etcd/api/v3 v3.5.1
-	go.etcd.io/etcd/client/v2 v2.305.0
 	go.etcd.io/etcd/client/v3 v3.5.1
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63

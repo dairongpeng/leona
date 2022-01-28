@@ -14,9 +14,9 @@
 
 package config
 
-import "github.com/dairongpeng/leona/internal/apiserver/options"
+import "github.com/dairongpeng/leona/internal/gstash/options"
 
-// Config is the running configuration structure of the LEONA gstash service.
+// Config is the running configuration structure of the LEONA Gstash service.
 type Config struct {
 	*options.Options
 }
